@@ -4,16 +4,16 @@
     </el-page-header>
     <el-form ref="form" :model="form" label-width="80px" id="pacakge_create_form" v-bind:vform="vobj" >
         <el-form-item label="套餐名" required>
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.name" :disabled="$route.query.update != 'true'"></el-input>
         </el-form-item>
         <el-form-item label="类型" required>
-            <el-input v-model="form.type"></el-input>
+            <el-input v-model.number="form.type" :disabled="$route.query.update != 'true'"></el-input>
         </el-form-item>
         <el-form-item label="每月资费" required>
-            <el-input v-model="form.monthly_cost"></el-input>
+            <el-input v-model.number="form.monthly_cost"></el-input>
         </el-form-item>
         <el-form-item label="每天资费">
-            <el-input v-model="form.daily_cost" ></el-input>
+            <el-input v-model.number="form.daily_cost" ></el-input>
         </el-form-item>
         <el-form-item label="用户描述">
             <el-input type="textarea" v-model="form.desc2"></el-input>
@@ -27,7 +27,7 @@
 </template>
 
 <style>
-#account_create_form {
+#pacakge_create_form {
     position: relative;
     left: 30px;
     top: 50px;

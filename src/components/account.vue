@@ -123,6 +123,7 @@ export default {
     created() {
         this.$store.dispatch('setAccountListData')
         this.loading = false
+        this.$cookies.set("xl_test","12354667")
     },
     watch: {
         '$store.state.accountListData': function (newV, oldV) {

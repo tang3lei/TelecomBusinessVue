@@ -1,20 +1,26 @@
 import Vue from 'vue'
-import ElementUI from 'element-ui';
-import VueRouter from 'vue-router'
-import router from './router'
 import Vuex from 'vuex'
+import VueCookies from 'vue-cookies'
+import VueRouter from 'vue-router'
 
+import ElementUI from 'element-ui';
 
-import 'element-ui/lib/theme-chalk/index.css'
+import router from './router'
 import App from './components/App.vue'
 
 import axios from 'axios'
+import echarts from 'echarts'
+
+
+import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
+Vue.use(VueCookies)
+Vue.prototype.$echarts = echarts
 
 
 const store = new Vuex.Store({
@@ -68,7 +74,21 @@ const store = new Vuex.Store({
     }
 })
 
-
+router.beforeEach((to, from, next) => {
+    if (to.meta.requireAuth) {
+        console.log("a", localStorage.getItem("xl_ck"))
+        if (localStorage.getItem("xl_ck") != null) {
+            next();
+        } else {
+            next({
+                path: '/login',
+                query: { redirect: to.fullPath }
+            })
+        }
+    } else {
+        next();
+    }
+});
 
 new Vue({
     router,

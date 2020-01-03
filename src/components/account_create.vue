@@ -2,22 +2,22 @@
 <div>
     <el-page-header @back="goBack" content="详情页面">
     </el-page-header>
-    <el-form ref="form" :model="form" label-width="80px" id="account_create_form" v-bind:vform="tableData" :vindex="vindex">
-        <el-form-item label="手机号" required>
-            <el-input v-model="form.phone_number"></el-input>
+    <el-form ref="form" :model="form" :rules="rules" label-width="80px" id="account_create_form" v-bind:vform="tableData" :vindex="vindex">
+        <el-form-item label="手机号" prop="phone_number">
+            <el-input v-model="form.phone_number" :disabled="$route.query.update != 'true'"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" required>
-            <el-input v-model="form.user_name"></el-input>
+        <el-form-item label="姓名" prop="user_name">
+            <el-input v-model="form.user_name" :disabled="$route.query.update != 'true'"></el-input>
         </el-form-item>
-        <el-form-item label="余额" required>
-            <el-input v-model="form.balance"></el-input>
+        <el-form-item label="余额" prop="balance">
+            <el-input v-model.number="form.balance" :disabled="$route.query.update != 'true'"></el-input>
         </el-form-item>
         <el-form-item label="账号停用">
             <el-switch v-model="form.status" :on-value='1' :off-value='0'></el-switch>
         </el-form-item>
         <el-form-item label="套餐选项">
             <el-select v-model="form.package" placeholder="请选择套餐">
-                <el-option  v-for="item in $store.state.packageListData" :key="item.name" :label="item.name" :value="item.name"></el-option>
+                <el-option v-for="item in $store.state.packageListData" :key="item.name" :label="item.name" :value="item.name"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="用户描述">
@@ -54,10 +54,35 @@ export default {
                 package: '',
                 desc2: '',
                 id: 0,
+            },
+            rules: {
+                phone_number: [{
+                        required: true,
+                        message: '手机号不能为空',
+                        trigger: 'blur'
+                    },
+                    {
+                        pattern: /^[1-9]{1}[0-9]{6}$/,
+                        message: '非0数字开头的七位数字'
+                    }
+                ],
+                user_name: [{
+                    required: true,
+                    message: '账户所有人不能为空',
+                    trigger: 'blur'
+                }],
+                balance: [{
+                    type: 'number',
+                    message: '必须为数字',
+                    trigger: 'blur'
+                }]
             }
         }
     },
     created() {
+        if (this.$route.query.update == 'true'){
+            dis = true
+        }
         const vobj = this.vform[this.vindex]
         if (vobj != null && this.$route.query.update != 'true') {
             this.form.phone_number = vobj.phone_number

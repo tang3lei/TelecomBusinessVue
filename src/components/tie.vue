@@ -11,63 +11,32 @@
             <el-tab-pane label="交易记录" name="/deal"><span slot="label"><i class="el-icon-s-operation"></i> 交易记录</span>
             </el-tab-pane>
         </el-tabs>
-        <el-dropdown id="dropdown">
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>查看</el-dropdown-item>
-                <el-dropdown-item>新增</el-dropdown-item>
-                <el-dropdown-item>删除</el-dropdown-item>
-            </el-dropdown-menu>
-        </el-dropdown>
-        <span style="color:#ffffff;">王小虎</span>
+        <span style="color:#ffffff;">
+            <el-dropdown id="dropdown" @command="handleCommand">
+                <i class="el-icon-setting" style="margin-right: 15px"></i>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="exit">登出</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            {{eName}}
+        </span>
     </el-header>
     <el-container>
         <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-            <el-menu :default-openeds="['1', '3']">
+            <el-menu :default-openeds="['1', '3']" @select="handleSelect">
                 <el-submenu index="1">
-                    <template slot="title"><i class="el-icon-message"></i>导航一</template>
-                    <el-menu-item-group>
-                        <template slot="title">分组一</template>
-                        <el-menu-item index="1-1">选项1</el-menu-item>
-                        <el-menu-item index="1-2">选项2</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="1-3">选项3</el-menu-item>
-                    </el-menu-item-group>
-                    <el-submenu index="1-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-                    </el-submenu>
+                    <template slot="title"><i class="el-icon-message"></i>数据统计</template>
+                    <el-menu-item index="1-1">月级收费统计</el-menu-item>
+                    <el-menu-item index="1-2">天级营业数据</el-menu-item>
                 </el-submenu>
                 <el-submenu index="2">
-                    <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-                    <el-menu-item-group>
-                        <template slot="title">分组一</template>
-                        <el-menu-item index="2-1">选项1</el-menu-item>
-                        <el-menu-item index="2-2">选项2</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="2-3">选项3</el-menu-item>
-                    </el-menu-item-group>
-                    <el-submenu index="2-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-                    </el-submenu>
+                    <template slot="title"><i class="el-icon-menu"></i>数据可视化</template>
+                    <el-menu-item index="2-1">用户消费</el-menu-item>
                 </el-submenu>
                 <el-submenu index="3">
-                    <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-                    <el-menu-item-group>
-                        <template slot="title">分组一</template>
-                        <el-menu-item index="3-1">选项1</el-menu-item>
-                        <el-menu-item index="3-2">选项2</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="3-3">选项3</el-menu-item>
-                    </el-menu-item-group>
-                    <el-submenu index="3-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-                    </el-submenu>
+                    <template slot="title"><i class="el-icon-setting"></i>快捷导航</template>
+                    <el-menu-item index="3-1">新建账户</el-menu-item>
+                    <el-menu-item index="3-2">新建套餐</el-menu-item>
                 </el-submenu>
             </el-menu>
         </el-aside>
@@ -89,15 +58,12 @@
     color: #333;
 }
 
-.el-tabs__item{color:#ffffff;}
-
-.el-dropdown{
-    color:#ffffff;
+.el-tabs__item {
+    color: #ffffff;
 }
 
-#dropdown {
-    position: absolute;
-    left: 1470px;
+.el-dropdown {
+    color: #ffffff;
 }
 
 #top_tabs {
@@ -111,8 +77,12 @@ export default {
     name: "tie",
     data() {
         return {
-            activeName: '/account'
+            activeName: '/account',
+            eName: '',
         }
+    },
+    created() {
+        this.eName = localStorage.getItem("xl_e_name")
     },
     methods: {
         handleClick(tab, event) {
@@ -139,6 +109,41 @@ export default {
                     break
             }
         },
+        handleCommand(command) {
+            localStorage.removeItem('xl_ck')
+            this.$emit('tie_update', true)
+
+        },
+        handleSelect(key, keyPath) {
+            console.log(keyPath[1])
+            switch (keyPath[1]) {
+                case "1-1":
+                    this.$router.push({
+                        path: "/month"
+                    })
+                    break
+                case "1-2":
+                    this.$router.push({
+                        path: "/daily"
+                    })
+                    break
+                case "2-1":
+                    this.$router.push({
+                        path: "/echarts"
+                    })
+                    break
+                case "3-1":
+                    this.$router.push({
+                        path: "/account/create"
+                    })
+                    break
+                case "3-2":
+                    this.$router.push({
+                        path: "/package/create"
+                    })
+                    break
+            }
+        }
     },
     watch: {
         $route(to, from) {

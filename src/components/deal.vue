@@ -7,7 +7,7 @@
         </el-table-column>
         <el-table-column prop="phone_number" label="账号" width="120">
         </el-table-column>
-        <el-table-column prop="job_number" label="操作人工号" width="120">
+        <el-table-column prop="job_name" label="操作人" width="120">
         </el-table-column>
         <el-table-column prop="type" label="类型" width="150">
         </el-table-column>

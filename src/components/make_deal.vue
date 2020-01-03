@@ -116,8 +116,13 @@ export default {
         },
         crashPaySubmit() {
             this.dialogFormVisible = false
+            const eName = localStorage.getItem('xl_e_name')
             const url = 'http://62.234.149.71:8080/api/account/change_balance?phone_number=' + this.account.phone_number + "&add_number=" + this.crashPayForm.number
-            axios.post(url)
+            axios.post(url, {}, {
+                    headers: {
+                        'e_name': eName
+                    }
+                })
                 .then((response) => {
                     console.log(response);
                     if (response.data.msg != 'success') {
@@ -131,7 +136,7 @@ export default {
                             message: '请求成功',
                             type: 'success'
                         });
-                        this.account.balance = parseInt(this.account.balance)+parseInt(this.crashPayForm.number)
+                        this.account.balance = parseInt(this.account.balance) + parseInt(this.crashPayForm.number)
                     }
                 })
                 .catch((error) => {
@@ -146,8 +151,14 @@ export default {
 
         },
         xonSubmit() {
+            const eName = localStorage.getItem('xl_e_name')
+
             const url = 'http://62.234.149.71:8080/api/account/use_balance?phone_number=' + this.account.phone_number + "&liuliang=" + this.xform.liuliang
-            axios.post(url)
+            axios.post(url, {}, {
+                    headers: {
+                        'e_name': eName
+                    }
+                })
                 .then((response) => {
                     console.log(response);
                     if (response.data.msg != 'success') {
@@ -163,7 +174,7 @@ export default {
                         });
                         const ls = this.xform.liuliang.split('-')
                         const num = parseInt(ls[2])
-                        this.account.balance = parseInt(this.account.balance)-num
+                        this.account.balance = parseInt(this.account.balance) - num
                     }
                 })
                 .catch((error) => {
@@ -175,8 +186,14 @@ export default {
                 });
         },
         yonSubmit() {
+            const eName = localStorage.getItem('xl_e_name')
+
             const url = 'http://62.234.149.71:8080/api/account/use_balance?phone_number=' + this.account.phone_number + "&kuandai=" + this.yform.kuandai
-            axios.post(url)
+            axios.post(url, {}, {
+                    headers: {
+                        'e_name': eName
+                    }
+                })
                 .then((response) => {
                     console.log(response);
                     if (response.data.msg != 'success') {
@@ -192,7 +209,7 @@ export default {
                         });
                         const ls = this.yform.kuandai.split('-')
                         const num = parseInt(ls[2])
-                        this.account.balance = parseInt(this.account.balance)-num
+                        this.account.balance = parseInt(this.account.balance) - num
                     }
                 })
                 .catch((error) => {
